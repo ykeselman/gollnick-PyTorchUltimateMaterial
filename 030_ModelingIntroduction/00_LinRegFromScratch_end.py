@@ -28,7 +28,7 @@ w = torch.rand(1, requires_grad=True, dtype=torch.float64)
 b = torch.rand(1, requires_grad=True, dtype=torch.float64)
 
 num_epochs = 100
-learning_rate = 1e-3
+learning_rate = 1e-2
 for epoch in range(num_epochs):
   for i in range(len(X)):
     # x, y = torch.tensor(X_list[i]), torch.tensor(y_list[i])
@@ -64,8 +64,8 @@ print(f"Slope: {reg.coef_}, Bias: {reg.intercept_}")
 # %% create graph visualisation
 # make sure GraphViz is installed (https://graphviz.org/download/)
 # if not computer restarted, append directly to PATH variable
-import os
-from torchviz import make_dot
-os.environ['PATH'] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin'
-make_dot(loss_tensor)
+# import os
+# from torchviz import make_dot
+# os.environ['PATH'] += os.pathsep + 'C:/Program Files (x86)/Graphviz/bin'
+# make_dot(loss_tensor)
 # %%
