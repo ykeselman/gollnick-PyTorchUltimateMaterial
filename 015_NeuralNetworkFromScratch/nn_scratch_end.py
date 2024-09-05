@@ -36,7 +36,6 @@ class NeuralNetworkFromScratch:
         self.y_train = y_train
         self.X_test = X_test
         self.y_test = y_test
-        self.L_train = []
         self.L_test = []
         
     def activation(self, x):
@@ -79,10 +78,6 @@ class NeuralNetworkFromScratch:
             y_train_true = self.y_train[random_pos]
             y_train_pred = self.forward(self.X_train[random_pos])
             
-            # calc training loss
-            L = np.sum(np.square(y_train_pred - y_train_true))
-            self.L_train.append(L)
-            
             # calc gradients
             dL_db, dL_dw = self.backward(
                 self.X_train[random_pos], self.y_train[random_pos]
@@ -110,6 +105,7 @@ nn.train(ITERATIONS=ITERATIONS)
 
 # %% check losses
 sns.lineplot(x=list(range(len(nn.L_test))), y=nn.L_test)
+
 # %% iterate over test data
 total = X_test_scale.shape[0]
 correct = 0
