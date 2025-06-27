@@ -1,5 +1,4 @@
 #%% packages
-import graphlib
 import numpy as np
 import pandas as pd
 import torch
@@ -107,6 +106,6 @@ torch.save(model.state_dict(), 'model_state_dict.pth')
 # %% load a model
 model = LinearRegressionTorch(input_size=input_dim, output_size=output_dim)
 # model.state_dict()  # randomly initialized
-model.load_state_dict(torch.load('model_state_dict.pth'))
+model.load_state_dict(torch.load('model_state_dict.pth', weights_only=True))
 model.state_dict()
 # %%
