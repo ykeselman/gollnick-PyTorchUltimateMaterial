@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 import torch
-import torch.nn as nn 
 import seaborn as sns
 
 #%% data import
@@ -27,15 +26,14 @@ y = torch.tensor(y_list)
 w = torch.rand(1, requires_grad=True, dtype=torch.float64)
 b = torch.rand(1, requires_grad=True, dtype=torch.float64)
 
-num_epochs = 100
+num_epochs = 200
 learning_rate = 1e-2
 for epoch in range(num_epochs):
   for i in range(len(X)):
-    # x, y = torch.tensor(X_list[i]), torch.tensor(y_list[i])
     # forward pass
     y_predict = X[i] * w + b
     # calculate loss
-    loss_tensor = torch.pow(y_predict - y[i], 2)
+    loss_tensor = (y_predict - y[i])*(y_predict - y[i])
     # backward pass
     loss_tensor.backward()
     # extract losses
@@ -46,7 +44,7 @@ for epoch in range(num_epochs):
       b -= b.grad * learning_rate
       w.grad.zero_()
       b.grad.zero_()
-  print(loss_value)
+  print('Current Loss:', loss_value)
 
 #%% check results
 print(f"Weight: {w.item()}, Bias: {b.item()}")

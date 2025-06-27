@@ -39,8 +39,14 @@ x = torch.tensor(1.0, requires_grad=True)
 y = (x-3) * (x-6) * (x-4)
 # calculate gradients
 y.backward()
+print("xgrad", x.grad)
+
 # show gradient of first tensor
-print(x.grad)
+z = (x-3) * (x-6) * (x-4)
+# calculate gradients
+z.backward()
+# show gradient of first tensor
+print("xgrad", x.grad)
 # %% x -> y -> z
 x = torch.tensor(1.0, requires_grad=True)
 y = x**3
