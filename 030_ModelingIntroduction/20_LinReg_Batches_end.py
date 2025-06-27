@@ -1,5 +1,4 @@
 #%% packages
-import graphlib
 import numpy as np
 import pandas as pd
 import torch
@@ -49,8 +48,12 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 #%% perform training
 losses = []
 slope, bias = [], []
-NUM_EPOCHS = 1000
-BATCH_SIZE = 2
+BATCH_SIZE = 16
+
+NUM_EPOCHS = 100*BATCH_SIZE
+# strangely enough, larger batch sizes require larger number of epochs
+# though the convergence is faster and the results better with larger batch sizes.
+
 for epoch in range(NUM_EPOCHS):
     for i in range(0, X.shape[0], BATCH_SIZE):
         # optimization
@@ -85,6 +88,7 @@ for epoch in range(NUM_EPOCHS):
         print(f"Epoch {epoch}, Loss: {loss.data}")
 
     
+print("Final values:", bias[-1], slope[-1])
 
 # %% visualise model training
 sns.scatterplot(x=range(len(losses)), y=losses)
@@ -103,6 +107,6 @@ y = [i[0] for i in y_true.data.numpy()]
 sns.scatterplot(x=X_list, y=y)
 sns.lineplot(x=X_list, y=y_pred, color='red')
 # %%
-import hiddenlayer as hl
-graph = hl.build_graph(model, X)
+# import hiddenlayer as hl
+# graph = hl.build_graph(model, X)
 # %%
