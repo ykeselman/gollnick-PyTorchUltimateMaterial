@@ -74,10 +74,6 @@ class NeuralNetworkFromScratch:
             # random position
             random_pos = np.random.randint(len(self.X_train))
             
-            # forward pass
-            y_train_true = self.y_train[random_pos]
-            y_train_pred = self.forward(self.X_train[random_pos])
-            
             # calc gradients
             dL_db, dL_dw = self.backward(
                 self.X_train[random_pos], self.y_train[random_pos]
