@@ -36,7 +36,7 @@ class IrisData(Dataset):
 
 # %% dataloader
 iris_data = IrisData(X_train=X_train, y_train=y_train)
-train_loader = DataLoader(dataset=iris_data, batch_size=32)
+train_loader = DataLoader(dataset=iris_data, batch_size=8)
 # %% check dims
 print(f"X Shape: {iris_data.X.shape}, y shape: {iris_data.y.shape}")
 
