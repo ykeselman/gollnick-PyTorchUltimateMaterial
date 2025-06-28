@@ -19,7 +19,7 @@ model = nn.Sequential(OrderedDict([
     ('fc2', nn.Linear(128, 64)),
     ('relu4', nn.ReLU()),
     ('fc3', nn.Linear(64, 1)),
-    ('sigmoid', nn.Sigmoid())
+    ('sigmoid', nn.Sigmoid()),
 ]))
 
 # %% test the model setup

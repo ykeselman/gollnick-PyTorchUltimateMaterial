@@ -3,29 +3,30 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
-import torch.nn.functional as F
 import os
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix
 os.getcwd()
 
 # %% transform and load data
-transform = transforms.Compose(
-    [transforms.Resize((50,50)),
+transform = transforms.Compose([
+    transforms.Resize((50,50)),
     transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
-    transforms.Normalize((0.5, ), (0.5, ))])
+    transforms.Normalize((0.5, ), (0.5, ))
+])
 
 batch_size = 4
-trainset = torchvision.datasets.ImageFolder(root='train', transform=transform)
+ROOT = '/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/060_CNN_ImageClassification/MulticlassClassification'
+trainset = torchvision.datasets.ImageFolder(root=f'{ROOT}/train', transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
-testset = torchvision.datasets.ImageFolder(root='test', transform=transform)
+testset = torchvision.datasets.ImageFolder(root=f'{ROOT}/test', transform=transform)
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=True)
 
 # %%
 CLASSES = ['affenpinscher', 'akita', 'corgi']
 NUM_CLASSES = len(CLASSES)
+
 class ImageMulticlassClassificationNet(nn.Module):
     def __init__(self) -> None:
         super().__init__()
@@ -38,6 +39,7 @@ class ImageMulticlassClassificationNet(nn.Module):
         self.fc3 = nn.Linear(64, NUM_CLASSES)
         self.relu = nn.ReLU()
         self.softmax = nn.LogSoftmax()
+
     
     def forward(self, x):
         x = self.conv1(x) # out: (BS, 6, 48, 48)
@@ -56,21 +58,19 @@ class ImageMulticlassClassificationNet(nn.Module):
         return x
 
 # input = torch.rand(1, 1, 50, 50) # BS, C, H, W
-model = ImageMulticlassClassificationNet()      
+model = ImageMulticlassClassificationNet()
 # model(input).shape
 
 # %% 
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 # %% training
-NUM_EPOCHS = 10
+NUM_EPOCHS = 20
 for epoch in range(NUM_EPOCHS):
     for i, data in enumerate(trainloader, 0):
         inputs, labels = data
         optimizer.zero_grad()
         outputs = model(inputs)
-
-        
         loss = loss_fn(outputs, labels)
         loss.backward()
         optimizer.step()

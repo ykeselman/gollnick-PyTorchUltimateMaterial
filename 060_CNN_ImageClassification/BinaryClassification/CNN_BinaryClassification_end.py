@@ -3,7 +3,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
-import torch.nn.functional as F
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,16 +10,18 @@ from sklearn.metrics import accuracy_score
 os.getcwd()
 
 #%%
-transform = transforms.Compose(
-    [transforms.Resize(32),
+transform = transforms.Compose([
+    transforms.Resize(32),
     transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
-    transforms.Normalize((0.5, ), (0.5, ))])
+    transforms.Normalize((0.5, ), (0.5, ))
+])
 
 batch_size = 4
-trainset = torchvision.datasets.ImageFolder(root='data/train', transform=transform)
+ROOT = '/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/060_CNN_ImageClassification/BinaryClassification'
+trainset = torchvision.datasets.ImageFolder(root=f'{ROOT}/data/train', transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True)
-testset = torchvision.datasets.ImageFolder(root='data/test', transform=transform)
+testset = torchvision.datasets.ImageFolder(root=f'{ROOT}/data/test', transform=transform)
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=True)
 classes = ['Positive', 'Negative']
 # %% visualize images
@@ -30,11 +31,10 @@ def imshow(img):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
 
-
 # get some random training images
-dataiter = iter(trainloader)
-images, labels = dataiter.next()
-imshow(torchvision.utils.make_grid(images, nrow=2))
+for images, labels in trainloader:
+    imshow(torchvision.utils.make_grid(images, nrow=2))
+    break
 # %% Neural Network setup
 class ImageClassificationNet(nn.Module):
     def __init__(self) -> None:
