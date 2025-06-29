@@ -1,5 +1,4 @@
 #%% packages
-from typing import OrderedDict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,13 +10,16 @@ import matplotlib.pyplot as plt
 import torchvision.utils 
 
 #%% Dataset and data loader
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/200_Autoencoders')
 path_images = 'data/train'
 
-transform = transforms.Compose(
-    [transforms.Resize((64,64)),
+transform = transforms.Compose([
+    transforms.Resize((64,64)),
     transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
-    transforms.Normalize((0.5, ), (0.5, ))])
+    transforms.Normalize((0.5, ), (0.5, ))
+])
 
 dataset = ImageFolder(root=path_images, transform=transform)
 dataloader = DataLoader(dataset, batch_size=8, shuffle=True)
@@ -31,7 +33,6 @@ class Encoder(nn.Module):
         self.relu = nn.ReLU()
         self.flatten = nn.Flatten() # out: 16*60*60 = 57600
         self.fc = nn.Linear(16*60*60, LATENT_DIMS)
-
     
     def forward(self, x):
         x = self.conv1(x)
@@ -104,7 +105,7 @@ def show_image(img):
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
 
-images, labels = iter(dataloader).next()
+images, labels = next(iter(dataloader))
 print('original')
 plt.rcParams["figure.figsize"] = (20,3)
 show_image(torchvision.utils.make_grid(images))
@@ -123,3 +124,5 @@ show_image(torchvision.utils.make_grid(model(images)))
 image_size = images.shape[2] * images.shape[3] * 1
 compression_rate = (1 - LATENT_DIMS / image_size) * 100
 compression_rate
+
+# %%
