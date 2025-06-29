@@ -4,6 +4,8 @@ from detecto.visualize import show_labeled_image
 from torchvision import transforms
 import numpy as np
 
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/070_CNN_ObjectDetection')
 
 #%% data download
 path_images = 'images'

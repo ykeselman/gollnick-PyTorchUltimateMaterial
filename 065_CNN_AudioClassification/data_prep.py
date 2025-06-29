@@ -1,7 +1,11 @@
+# %%
+
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/065_CNN_AudioClassification')
+
 #%% package import
 import torchaudio
 from plot_audio  import plot_specgram
-import os
 import random
 # %%
 wav_path = 'data/set_a'

@@ -1,9 +1,12 @@
+# %% work dir
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/065_CNN_AudioClassification')
+
 #%% packages
 import torch
 import torchvision
 import torchvision.transforms as transforms
 import torch.nn as nn
-import torch.nn.functional as F
 import seaborn as sns
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -69,8 +72,6 @@ for epoch in range(NUM_EPOCHS):
         inputs, labels = data
         optimizer.zero_grad()
         outputs = model(inputs)
-
-        
         loss = loss_fn(outputs, labels)
         loss.backward()
         optimizer.step()
