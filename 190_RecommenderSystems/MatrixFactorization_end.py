@@ -7,8 +7,13 @@ from torch.utils.data import Dataset, DataLoader
 from collections import defaultdict
 from sklearn.metrics import mean_squared_error
 #%% data import
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/190_RecommenderSystems')
 df = pd.read_csv("ratings.csv")
 df.head(2)
+
+# %%
+len(df), len(set(df.userId.to_list())), len(set(df.movieId.to_list()))
 #%%
 print(f"Unique Users: {df.userId.nunique()}, Unique Movies: {df.movieId.nunique()}")
 
@@ -18,6 +23,7 @@ class MovieDataset(Dataset):
         self.users = users
         self.movies = movies
         self.ratings = ratings
+
     # len(movie_dataset)
     def __len__(self):
         return len(self.users)
@@ -25,9 +31,8 @@ class MovieDataset(Dataset):
     def __getitem__(self, idx):
         users = self.users[idx] 
         movies = self.movies[idx]
-        ratings = self.ratings[idx]
-        
-        return torch.tensor(users, dtype=torch.long), torch.tensor(movies, dtype=torch.long),torch.tensor(ratings, dtype=torch.long),
+        ratings = self.ratings[idx]        
+        return torch.tensor(users, dtype=torch.long), torch.tensor(movies, dtype=torch.long), torch.tensor(ratings, dtype=torch.long),
        
 #%% Model Class
 class RecSysModel(nn.Module):
@@ -67,19 +72,23 @@ valid_dataset = MovieDataset(
 )
 #%% Data Loaders
 BATCH_SIZE = 4
-train_loader = DataLoader(dataset=train_dataset,
-                          batch_size=BATCH_SIZE,
-                          shuffle=True
-                          ) 
+train_loader = DataLoader(
+    dataset=train_dataset,
+    batch_size=BATCH_SIZE,
+    shuffle=True
+) 
 
-test_loader = DataLoader(dataset=valid_dataset,
-                          batch_size=BATCH_SIZE,
-                          shuffle=True
-                          ) 
+test_loader = DataLoader(
+    dataset=valid_dataset,
+    batch_size=BATCH_SIZE,
+    shuffle=True
+)
 #%% Model Instance, Optimizer, and Loss Function
 model = RecSysModel(
     n_users=len(lbl_user.classes_),
-    n_movies=len(lbl_movie.classes_))
+    n_movies=len(lbl_movie.classes_),
+    n_embeddings=64,
+)
 
 optimizer = torch.optim.Adam(model.parameters())  
 criterion = nn.MSELoss()
@@ -91,8 +100,7 @@ model.train()
 for epoch_i in range(NUM_EPOCHS):
     for users, movies, ratings in train_loader:
         optimizer.zero_grad()
-        y_pred = model(users, 
-                       movies)         
+        y_pred = model(users, movies)         
         y_true = ratings.unsqueeze(dim=1).to(torch.float32)
         loss = criterion(y_pred, y_true)
         loss.backward()
