@@ -12,12 +12,17 @@ from sklearn.metrics import accuracy_score
 # %% data prep
 # original data from https://www.microsoft.com/en-us/download/details.aspx?id=54765
 
+import os
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/120_TransferLearning')
+
 train_dir = 'train' 
 test_dir =  'test'
 
-transform = transforms.Compose([transforms.Resize(255), 
-    transforms.CenterCrop(224), 
-    transforms.ToTensor()]) 
+transform = transforms.Compose([
+    transforms.Resize(255),
+    transforms.CenterCrop(224),
+    transforms.ToTensor()
+])
  
 dataset = torchvision.datasets.ImageFolder(train_dir, transform= transform) 
 train_loader = torch.utils.data.DataLoader(dataset, batch_size=128,shuffle=True) 
@@ -60,7 +65,7 @@ loss_function = nn.BCELoss()
 train_losses=[] 
  
 model.train() 
-NUM_EPOCHS = 10
+NUM_EPOCHS = 20
 for epoch in range(NUM_EPOCHS): 
     train_loss= 0 
     test_loss= 0 
@@ -95,7 +100,7 @@ sns.lineplot(x = range(len(train_losses)), y = train_losses)
 # %%
 fig = plt.figure(figsize=(10, 10)) 
 class_labels = {0:'cat', 1:'dog'} 
-X_test, y_test = iter(test_loader).next() 
+X_test, y_test = next(iter(test_loader))
 with torch.no_grad():
     y_pred = model(X_test) 
     y_pred = y_pred.round()
