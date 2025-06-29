@@ -52,6 +52,7 @@ model
 for params in model.parameters(): 
     params.requires_grad = False 
 
+model.classifier
 #%% overwrite classifier of model
 model.classifier = nn.Sequential(OrderedDict([ 
     ('fc1',nn.Linear(1024,1)), 
