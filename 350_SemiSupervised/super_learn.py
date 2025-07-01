@@ -22,6 +22,7 @@ transform_super = transforms.Compose(
     transforms.Normalize((0.5, ), (0.5, ))])
 
 #%% Dataset for train and test
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/350_SemiSupervised')
 train_ds = torchvision.datasets.ImageFolder(root='data/train', transform=transform_super)
 test_ds = torchvision.datasets.ImageFolder(root='data/test', transform=transform_super)
 # %% Dataloaders

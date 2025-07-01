@@ -1,15 +1,11 @@
 #%% packages
-import graphlib
 import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader 
-import seaborn as sns
-
 
 import pytorch_lightning as pl
-
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
 #%% data import
@@ -72,7 +68,7 @@ class LitLinearRegression(pl.LightningModule):
         X, y = val_batch
 
         # forward pass
-        y_pred = model(X)
+        y_pred = self(X)
 
         # compute loss
         loss = self.loss_fun(y_pred, y)

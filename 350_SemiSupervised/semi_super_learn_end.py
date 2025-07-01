@@ -13,7 +13,7 @@ import seaborn as sns
 # %% Hyperparameters
 BATCH_SIZE = 10
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-NUM_EPOCHS = 50
+NUM_EPOCHS = 150
 LOSS_FACTOR_SELFSUPERVISED = 1
 # %% image transformation steps
 transform_super = transforms.Compose(
@@ -21,6 +21,8 @@ transform_super = transforms.Compose(
     transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
     transforms.Normalize((0.5, ), (0.5, ))])
+
+os.chdir('/home/yakov/Studies/gollnick-PyTorchUltimateMaterial/350_SemiSupervised')
 
 #%% Class for Unlabeled Dataset
 class UnlabeledDataset(Dataset):
@@ -107,7 +109,7 @@ model.train()
 criterion_supervised = nn.CrossEntropyLoss()
 criterion_selfsupervised = nn.CrossEntropyLoss()
 
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.005)
 
 # %% Training loop
 train_losses_self = []
